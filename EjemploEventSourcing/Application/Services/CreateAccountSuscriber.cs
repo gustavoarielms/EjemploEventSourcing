@@ -1,27 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EjemploEventSourcing.Application.Domain.Events;
+﻿using EjemploEventSourcing.Application.Domain.Events;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
-using EjemploEventSourcing.Application.Domain.Events.Services;
 using EjemploEventSourcing.Application.Gateways;
 using EjemploEventSourcing.Infraestructura.services;
+using EjemploEventSourcing.Presentation;
 using EjemploEventSourcing.Repositorios;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace EjemploEventSourcing.Application.Services
 {
     public class CreateAccountSuscriber : IDomainEventsSuscriber
     {
-        private readonly ICreateAccountGateway _gateway;
         private readonly IEventStoreService _service;
-        private readonly EventStoreDBContext _context;
+        private readonly IAccountCreatedPresenter _presenter;
 
-        public CreateAccountSuscriber(ICreateAccountGateway gateway, IEventStoreService service, EventStoreDBContext context)
+        public CreateAccountSuscriber(
+            IEventStoreService service,
+            IAccountCreatedPresenter presenter)
         {
-            _context = context;
             _service = service;
-            _gateway = gateway;
+            _presenter = presenter;
         }
 
         public async Task ManageEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)
@@ -30,17 +29,21 @@ namespace EjemploEventSourcing.Application.Services
             try
             {
                 await _service.Save(dto);
+                _presenter.PublishAccountCreated(dto.AggregateId);
             }
             catch (Exception ex)
             {
-                throw ex;
+                _presenter.PublishErrorCreatingAccount(ex.Message);
+                throw;
             }
         }
 
         public IEnumerable<EventTypes> SuscribeTo()
         {
-            var suscribeList = new List<EventTypes>();
-            suscribeList.Add(EventTypes.AccountCreated);
+            var suscribeList = new List<EventTypes>
+            {
+                EventTypes.AccountCreated
+            };
             return suscribeList;
         }
     }

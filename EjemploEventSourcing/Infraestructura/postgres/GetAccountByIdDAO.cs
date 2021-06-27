@@ -19,7 +19,11 @@ namespace EjemploEventSourcing.Infraestructura.postgres
 
         IAggregateInfoConstructor IGetAccountByIdGateway.GetAccountById(string accountId)
         {
+            if(!_context.Aggregates.Any())
+                throw new InvalidOperationException();
+
             var aggregate = _context.Aggregates.ToList().DefaultIfEmpty(null).SingleOrDefault(b => b.Id == accountId);
+            
             if (aggregate == null)
                 throw new InvalidOperationException();
 
