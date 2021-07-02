@@ -3,7 +3,6 @@ using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 using EjemploEventSourcing.Application.Gateways;
 using EjemploEventSourcing.Infraestructura.services;
 using EjemploEventSourcing.Presentation;
-using EjemploEventSourcing.Repositorios;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace EjemploEventSourcing.Application.Services
             try
             {
                 await _service.Save(dto);
-                _presenter.PublishAccountCreated(dto.AggregateId);
+                _presenter.PublishAccountCreated(dto.AggregateId, dto.AggregateData);
             }
             catch (Exception ex)
             {

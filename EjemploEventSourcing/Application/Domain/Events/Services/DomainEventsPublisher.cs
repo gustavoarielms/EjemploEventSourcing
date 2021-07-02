@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 
 namespace EjemploEventSourcing.Application.Domain.Events.Services
@@ -49,10 +50,13 @@ namespace EjemploEventSourcing.Application.Domain.Events.Services
                 }
             );
 
-            foreach(var suscriber in suscribers)
-            {
-                suscriber.ManageEvent(aggregateInfo, eventVersion, e);
-            }
+            Parallel.ForEach(
+                suscribers, 
+                async x =>
+                {
+                    await x.ManageEvent(aggregateInfo, eventVersion, e);
+                }
+            );
         }
 
         public void PublishEvents(IChangesInAggregateInfo changes)

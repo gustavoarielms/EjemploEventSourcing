@@ -15,6 +15,7 @@ namespace EjemploEventSourcing.Presentation
 
         public CreateAccountController(ICreateAccountInteractor intercator, CreateAccountSuscriber suscriber)
         {
+            DomainEventsPublisher.GetInstancia().ResetSuscribers();
             DomainEventsPublisher.GetInstancia().RegisterSuscriber(suscriber);
             _interactor = intercator;
         }

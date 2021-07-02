@@ -9,20 +9,13 @@ namespace EjemploEventSourcing.Application.Interactors.CreateAccount
     {
         public void Execute(string id)
         {
-            try
-            {
-                var account = Account.CreateAccount(id);
+            var account = Account.CreateAccount(id);
 
-                if (account.HasChanges())
-                {
-                    var changes = account.GetChanges();
-                    DomainEventsPublisher.GetInstancia().PublishEvents(changes);
-                    account.AcceptChanges();
-                }
-            }
-            catch (Exception e)
+            if (account.HasChanges())
             {
-                throw e;
+                var changes = account.GetChanges();
+                DomainEventsPublisher.GetInstancia().PublishEvents(changes);
+                account.AcceptChanges();
             }
                 
         }

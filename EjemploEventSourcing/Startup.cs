@@ -57,6 +57,7 @@ namespace EjemploEventSourcing
             services.AddScoped<ICreateAccountGateway, CreateAccountDAO>();
             services.AddScoped<IEventStoreService, EventStoreService>();
             services.AddScoped<IAccountCreatedPresenter, AccountCreatedPresenter>();
+            services.AddScoped<IAmountDepositedPresenter, AmountDepositedPresenter>();
             services.AddScoped<CreateAccountSuscriber>();
             services.AddScoped<DepositAmountSuscriber>();
             services.AddControllers();
