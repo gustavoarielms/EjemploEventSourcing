@@ -37,41 +37,40 @@ namespace EjemploEventSourcing.Infraestructura.services
             //using var transaction = _context.Database.BeginTransaction();
             try
             {
-                if (_context.Aggregates.Any())
+                Aggregate aggregate = null;
+                if(_context.Aggregates.Any())
+                    aggregate = await _context.Aggregates.FindAsync(_aggregateId);
+
+                if (aggregate == null)
                 {
-                    var aggregate = await _context.Aggregates.FindAsync(_aggregateId);
-
-                    if (aggregate == null)
+                    aggregate = new Aggregate
                     {
-                        aggregate = new Aggregate
-                        {
-                            Id = _aggregateId,
-                            Type = _aggregateType,
-                            LastVersion = _aggregateActualVersion
-                        };
+                        Id = _aggregateId,
+                        Type = _aggregateType,
+                        LastVersion = _aggregateActualVersion
+                    };
 
-                        _context.Aggregates.Add(aggregate);
-                    }
-                    else
-                    {
-                        aggregate.LastVersion = _aggregateActualVersion;
-                    }
-
-                    //await _context.SaveChangesAsync();
-
-                    foreach (var e in _events)
-                    {
-                        var eventToSave = EventStoreDtoMapper.MapperFromEventToEventStoreDTO(e);
-                        eventToSave.MetaData = eventToSave.AggregateData;
-                        eventToSave.AggregateVersion = e.EventVersion;
-                        _context.Events.Add(eventToSave);
-
-
-                    }
-
-                    await _context.SaveChangesAsync();
-                    //await transaction.CommitAsync();
+                    _context.Aggregates.Add(aggregate);
                 }
+                else
+                {
+                    aggregate.LastVersion = _aggregateActualVersion;
+                }
+
+                //await _context.SaveChangesAsync();
+
+                foreach (var e in _events)
+                {
+                    var eventToSave = EventStoreDtoMapper.MapperFromEventToEventStoreDTO(e);
+                    eventToSave.MetaData = eventToSave.AggregateData;
+                    eventToSave.AggregateVersion = e.EventVersion;
+                    _context.Events.Add(eventToSave);
+
+
+                }
+
+                await _context.SaveChangesAsync();
+                //await transaction.CommitAsync();
             }
             catch (Exception)
             {

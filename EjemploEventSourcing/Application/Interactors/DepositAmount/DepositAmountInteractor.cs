@@ -19,7 +19,7 @@ namespace EjemploEventSourcing.Application.Interactors.DepositAmount
             try
             {
                 var constructor = _getAccountById.GetAccountById(accountId);
-                var account = Account.CreateAccount(constructor.AggregateId);
+                var account = Account.CreateEmptyAccount(constructor.AggregateId);
                 account.BuildAggregate(constructor);
                 account.DepositAmount(depositAmount);
 

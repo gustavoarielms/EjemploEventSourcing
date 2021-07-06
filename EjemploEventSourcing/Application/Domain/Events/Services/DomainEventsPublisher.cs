@@ -42,21 +42,13 @@ namespace EjemploEventSourcing.Application.Domain.Events.Services
 
         public void PublishEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)
         {
-            var suscribers = _suscribers.Select(
-                x =>
-                {
-                    x.SuscribeTo().Where(y => y == e.GetEventType());
-                    return x;
-                }
-            );
+            var suscribers = _suscribers.Where(x => x.SuscribeTo().Any(y => y == e.GetEventType())).ToList();
 
-            Parallel.ForEach(
-                suscribers, 
-                async x =>
-                {
-                    await x.ManageEvent(aggregateInfo, eventVersion, e);
-                }
-            );
+
+            foreach (var suscriber in suscribers) 
+            {
+                suscriber.ManageEvent(aggregateInfo, eventVersion, e);
+            }
         }
 
         public void PublishEvents(IChangesInAggregateInfo changes)
