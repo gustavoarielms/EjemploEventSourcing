@@ -47,7 +47,9 @@ namespace EjemploEventSourcing
             services.AddSingleton<IConnectionFactory>(rabbitFactory);
 
             services.AddDbContext<EventStoreDBContext>(opt =>
-                opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConnection")));
+                opt.UseNpgsql(Configuration.GetConnectionString("MyWebApiConnection")),
+                ServiceLifetime.Singleton);
+
             services.AddScoped<IGetAccountByIdInteractor, GetAccountByIdInteractor>();
             services.AddScoped<IGetAccountsInteractor, GetAccountsInteractor>();
             services.AddScoped<ICreateAccountInteractor, CreateAccountInteractor>();
@@ -57,6 +59,7 @@ namespace EjemploEventSourcing
             services.AddScoped<ICreateAccountGateway, CreateAccountDAO>();
             services.AddScoped<IEventStoreService, EventStoreService>();
             services.AddScoped<IAccountCreatedPresenter, AccountCreatedPresenter>();
+            services.AddScoped<IAmountDepositedPresenter, AmountDepositedPresenter>();
             services.AddScoped<CreateAccountSuscriber>();
             services.AddScoped<DepositAmountSuscriber>();
             services.AddControllers();

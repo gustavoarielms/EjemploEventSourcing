@@ -17,7 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infraestructura\Repositorios\" />
-    <Folder Include="Application\DTO\" />
     <Folder Include="Application\Domain\" />
     <Folder Include="Application\Domain\Entities\" />
     <Folder Include="Application\Domain\Events\" />

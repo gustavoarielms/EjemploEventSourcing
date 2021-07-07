@@ -1,0 +1,134 @@
+{
+    "rabbit_version": "3.8.3",
+    "rabbitmq_version": "3.8.3",
+    "users": [
+        {
+            "name": "guest",
+            "password_hash": "ZZiLrBJwnZi5WvlJdwoOHFEVfHWE4KIqSvtBc5whwcXQCaiL",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": "administrator"
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "example-vhost"
+        }
+    ],
+    "permissions": [
+        {
+            "user": "guest",
+            "vhost": "example-vhost",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "topic_permissions": [
+        {
+            "user": "guest",
+            "vhost": "example-vhost",
+            "exchange": "",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "parameters": [],
+    "global_parameters": [
+        {
+            "name": "cluster_name",
+            "value": "rabbit@rabbitmq-example-server"
+        },
+        {
+            "name": "internal_cluster_id",
+            "value": "rabbitmq-cluster-id-uiQY72El-t7KshK33EgSmA"
+        }
+    ],
+    "policies": [],
+    "queues": [
+        {
+            "name": "AmountDeposited",
+            "vhost": "example-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-max-length": 5,
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "AccountCreated",
+            "vhost": "example-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-max-length": 5,
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "Events",
+            "vhost": "example-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-max-length": 5,
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "Errors",
+            "vhost": "example-vhost",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-max-length": 5,
+                "x-queue-type": "classic"
+            }
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "example-exchange",
+            "vhost": "example-vhost",
+            "type": "topic",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+        {
+            "source": "example-exchange",
+            "vhost": "example-vhost",
+            "destination": "AmountDeposited",
+            "destination_type": "queue",
+            "routing_key": "event.AmountDeposited",
+            "arguments": {}
+        },        
+        {
+            "source": "example-exchange",
+            "vhost": "example-vhost",
+            "destination": "AccountCreated",
+            "destination_type": "queue",
+            "routing_key": "event.AccountCreated",
+            "arguments": {}
+        },        
+        {
+            "source": "example-exchange",
+            "vhost": "example-vhost",
+            "destination": "Events",
+            "destination_type": "queue",
+            "routing_key": "event.*",
+            "arguments": {}
+        },        
+        {
+            "source": "example-exchange",
+            "vhost": "example-vhost",
+            "destination": "Errors",
+            "destination_type": "queue",
+            "routing_key": "error.*",
+            "arguments": {}
+        }
+    ]
+  }

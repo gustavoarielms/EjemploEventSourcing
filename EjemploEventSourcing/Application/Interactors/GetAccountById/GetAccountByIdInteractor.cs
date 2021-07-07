@@ -16,7 +16,7 @@ namespace EjemploEventSourcing.Application.Interactors.GetAccountById
         public Account GetById(string accountId)
         {
             var constructor = _gateway.GetAccountById(accountId);
-            var account = Account.CreateAccount(constructor.AggregateId);
+            var account = Account.CreateEmptyAccount(constructor.AggregateId);
             account.BuildAggregate(constructor);
             return account;
         }

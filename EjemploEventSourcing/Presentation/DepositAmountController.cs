@@ -20,6 +20,7 @@ namespace EjemploEventSourcing.Presentation
 
         public DepositAmountController(IDepositAmountInteractor intercator, DepositAmountSuscriber suscriber)
         {
+            DomainEventsPublisher.GetInstancia().ResetSuscribers();
             DomainEventsPublisher.GetInstancia().RegisterSuscriber(suscriber);
             _interactor = intercator;
         }

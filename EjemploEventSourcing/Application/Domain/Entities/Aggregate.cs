@@ -65,8 +65,6 @@ namespace EjemploEventSourcing.Application.Domain.Entities
                 _actualVersion++;
             }
 
-            _baseVersion = _actualVersion;
-
             if (_baseVersion != _actualVersion)
                 throw new InvalidOperationException($"The base version does not match with the actual version of the aggregate - Base: {_baseVersion} - Actual: {_actualVersion}");
         }

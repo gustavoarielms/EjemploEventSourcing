@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 
 namespace EjemploEventSourcing.Application.Domain.Events.Services
@@ -41,15 +42,10 @@ namespace EjemploEventSourcing.Application.Domain.Events.Services
 
         public void PublishEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)
         {
-            var suscribers = _suscribers.Select(
-                x =>
-                {
-                    x.SuscribeTo().Where(y => y == e.GetEventType());
-                    return x;
-                }
-            );
+            var suscribers = _suscribers.Where(x => x.SuscribeTo().Any(y => y == e.GetEventType())).ToList();
 
-            foreach(var suscriber in suscribers)
+
+            foreach (var suscriber in suscribers) 
             {
                 suscriber.ManageEvent(aggregateInfo, eventVersion, e);
             }
