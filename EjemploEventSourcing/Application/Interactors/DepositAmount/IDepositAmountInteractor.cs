@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 namespace EjemploEventSourcing.Application.Interactors.DepositAmount
 {
     public interface IDepositAmountInteractor
     {
-        void Execute(string accountId, decimal depositAmount);
+        Task Execute(string accountId, decimal depositAmount);
     }
 }

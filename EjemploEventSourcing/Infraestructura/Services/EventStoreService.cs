@@ -34,7 +34,7 @@ namespace EjemploEventSourcing.Infraestructura.services
 
         public async Task Commit()
         {
-            //using var transaction = _context.Database.BeginTransaction();
+            using var transaction = _context.Database.BeginTransaction();
             try
             {
                 Aggregate aggregate = null;
@@ -57,7 +57,7 @@ namespace EjemploEventSourcing.Infraestructura.services
                     aggregate.LastVersion = _aggregateActualVersion;
                 }
 
-                //await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 foreach (var e in _events)
                 {
@@ -65,16 +65,16 @@ namespace EjemploEventSourcing.Infraestructura.services
                     eventToSave.MetaData = eventToSave.AggregateData;
                     eventToSave.AggregateVersion = e.EventVersion;
                     _context.Events.Add(eventToSave);
-
+                    await _context.SaveChangesAsync();
 
                 }
 
-                await _context.SaveChangesAsync();
-                //await transaction.CommitAsync();
+                //await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
             }
             catch (Exception)
             {
-                //await transaction.RollbackAsync();
+                await transaction.RollbackAsync();
                 throw;
             }
         }

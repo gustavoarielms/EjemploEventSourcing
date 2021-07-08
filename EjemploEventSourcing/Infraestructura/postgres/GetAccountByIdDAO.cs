@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Events;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 using EjemploEventSourcing.Application.Gateways;
 using EjemploEventSourcing.Infraestructura.Services;
 using EjemploEventSourcing.Repositorios;
+using Microsoft.EntityFrameworkCore;
 
 namespace EjemploEventSourcing.Infraestructura.postgres
 {
@@ -17,17 +19,17 @@ namespace EjemploEventSourcing.Infraestructura.postgres
             _context = context;
         }
 
-        IAggregateInfoConstructor IGetAccountByIdGateway.GetAccountById(string accountId)
+        public async Task<IAggregateInfoConstructor> GetAccountById(string accountId)
         {
-            if(!_context.Aggregates.Any())
-                throw new InvalidOperationException();
+            //if(!_context.Aggregates.Any())
+            //    throw new InvalidOperationException();
 
-            var aggregate = _context.Aggregates.ToList().DefaultIfEmpty(null).SingleOrDefault(b => b.Id == accountId);
+            var aggregate = await _context.Aggregates.FindAsync(accountId);
             
             if (aggregate == null)
                 throw new InvalidOperationException();
 
-            var events = _context.Events.ToList().Where(x => x.AggregateId == accountId).OrderBy(x => x.AggregateVersion);
+            var events = await _context.Events.Where(x => x.AggregateId == accountId).OrderBy(x => x.AggregateVersion).ToListAsync();
             return new AggregateInfoConstructor
             {
                 AggregateId = aggregate.Id,

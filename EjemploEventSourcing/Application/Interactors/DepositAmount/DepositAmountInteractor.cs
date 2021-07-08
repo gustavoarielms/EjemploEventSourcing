@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Entities;
 using EjemploEventSourcing.Application.Domain.Events.Services;
 using EjemploEventSourcing.Application.Gateways;
@@ -14,11 +15,11 @@ namespace EjemploEventSourcing.Application.Interactors.DepositAmount
             _getAccountById = getAccountById;
         }
 
-        public void Execute(string accountId, decimal depositAmount)
+        public async Task Execute(string accountId, decimal depositAmount)
         {
             try
             {
-                var constructor = _getAccountById.GetAccountById(accountId);
+                var constructor = await _getAccountById.GetAccountById(accountId);
                 var account = Account.CreateEmptyAccount(constructor.AggregateId);
                 account.BuildAggregate(constructor);
                 account.DepositAmount(depositAmount);

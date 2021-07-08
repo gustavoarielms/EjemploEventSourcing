@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 
 namespace EjemploEventSourcing.Application.Gateways
 {
     public interface IGetAccountByIdGateway
     {
-        IAggregateInfoConstructor GetAccountById(string accountId);
+        Task<IAggregateInfoConstructor> GetAccountById(string accountId);
     }
 }
