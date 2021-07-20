@@ -1,8 +1,7 @@
 ﻿using EjemploEventSourcing.Application.Domain.Events;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
-using EjemploEventSourcing.Application.Gateways;
-using EjemploEventSourcing.Infraestructura.services;
-using EjemploEventSourcing.Presentation;
+using EjemploEventSourcing.Application.IPresenters;
+using EjemploEventSourcing.Application.services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

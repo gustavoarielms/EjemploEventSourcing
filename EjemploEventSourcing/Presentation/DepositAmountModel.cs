@@ -1,5 +1,4 @@
-﻿using System;
-namespace EjemploEventSourcing.Presentation
+﻿namespace EjemploEventSourcing.IPresenters
 {
     public class DepositAmountModel
     {

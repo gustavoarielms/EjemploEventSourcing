@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Events;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
-using EjemploEventSourcing.Infraestructura.services;
-using EjemploEventSourcing.Presentation;
+using EjemploEventSourcing.Application.IPresenters;
+using EjemploEventSourcing.Application.services;
 
 namespace EjemploEventSourcing.Application.Services
 {
