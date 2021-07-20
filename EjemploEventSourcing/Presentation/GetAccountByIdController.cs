@@ -23,9 +23,9 @@ namespace EjemploEventSourcing.Presentation
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            var account = _interactor.GetById(id);
+            var account = await _interactor.GetById(id);
             return Ok(account);
         }
     }
