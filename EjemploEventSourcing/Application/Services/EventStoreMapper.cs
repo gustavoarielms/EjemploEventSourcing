@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using EjemploEventSourcing.Application.Domain.Entities;
+﻿using System.Text.Json;
 using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 using EjemploEventSourcing.Application.DTO;
 
