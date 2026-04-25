@@ -40,24 +40,24 @@ namespace EjemploEventSourcing.Application.Domain.Events.Services
             _suscribers = Enumerable.Empty<IDomainEventsSuscriber>().ToList();
         }
 
-        public void PublishEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)
+        public async Task PublishEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)
         {
             var suscribers = _suscribers.Where(x => x.SuscribeTo().Any(y => y == e.GetEventType())).ToList();
 
 
             foreach (var suscriber in suscribers) 
             {
-                suscriber.ManageEvent(aggregateInfo, eventVersion, e);
+                await suscriber.ManageEvent(aggregateInfo, eventVersion, e);
             }
         }
 
-        public void PublishEvents(IChangesInAggregateInfo changes)
+        public async Task PublishEvents(IChangesInAggregateInfo changes)
         {
             var increment = 1;
             foreach (var e in changes.Events)
             {
                 var eventVersion = changes.AggregateInfo.AggregateBaseVersion + increment;
-                PublishEvent(changes.AggregateInfo, eventVersion, e);
+                await PublishEvent(changes.AggregateInfo, eventVersion, e);
                 increment++;
             }
         }

@@ -5,6 +5,6 @@ namespace EjemploEventSourcing.Application.Interactors.CreateAccount
 {
     public interface ICreateAccountInteractor
     {
-        void Execute(string id);
+        Task Execute(string id);
     }
 }

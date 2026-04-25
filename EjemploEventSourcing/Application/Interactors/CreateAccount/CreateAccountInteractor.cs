@@ -7,14 +7,14 @@ namespace EjemploEventSourcing.Application.Interactors.CreateAccount
 {
     public class CreateAccountInteractor : ICreateAccountInteractor
     {
-        public void Execute(string id)
+        public async Task Execute(string id)
         {
             var account = Account.CreateAccount(id);
 
             if (account.HasChanges())
             {
                 var changes = account.GetChanges();
-                DomainEventsPublisher.GetInstancia().PublishEvents(changes);
+                await DomainEventsPublisher.GetInstancia().PublishEvents(changes);
                 account.AcceptChanges();
             }
                 

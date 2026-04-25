@@ -22,7 +22,7 @@ namespace EjemploEventSourcing.IPresenters
         [HttpPost]
         public async Task<IActionResult> Post(DepositAmountModel model)
         {
-            _interactor.Execute(model.AccountId, model.DepositAmount);
+            await _interactor.Execute(model.AccountId, model.DepositAmount);
             return Ok();
         }
     }
