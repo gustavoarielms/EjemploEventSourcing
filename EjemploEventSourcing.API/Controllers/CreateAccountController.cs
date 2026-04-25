@@ -24,7 +24,7 @@ namespace EjemploEventSourcing.IPresenters
         public async Task<IActionResult> Post()
         {
             var id = Guid.NewGuid();
-            _interactor.Execute(id.ToString());
+            await _interactor.Execute(id.ToString());
             return Ok(id);
         }
     }

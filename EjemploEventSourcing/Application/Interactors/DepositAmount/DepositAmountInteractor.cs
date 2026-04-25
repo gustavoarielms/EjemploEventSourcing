@@ -27,7 +27,7 @@ namespace EjemploEventSourcing.Application.Interactors.DepositAmount
                 if (account.HasChanges())
                 {
                     var changes = account.GetChanges();
-                    DomainEventsPublisher.GetInstancia().PublishEvents(changes);
+                    await DomainEventsPublisher.GetInstancia().PublishEvents(changes);
                     account.AcceptChanges();
                 }
             }
