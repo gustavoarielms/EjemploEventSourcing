@@ -29,9 +29,9 @@ namespace EjemploEventSourcing.Application.Services
                 await _service.Save(dto);
                 _presenter.PublishAmountDeposited(dto.AggregateId, dto.AggregateData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
 
