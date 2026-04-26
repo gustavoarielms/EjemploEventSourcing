@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EjemploEventSourcing.Application.Domain.Events.Services;
 using EjemploEventSourcing.Application.Interactors.CreateAccount;
-using EjemploEventSourcing.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EjemploEventSourcing.IPresenters
@@ -13,10 +11,8 @@ namespace EjemploEventSourcing.IPresenters
     {
         private readonly ICreateAccountInteractor _interactor;
 
-        public CreateAccountController(ICreateAccountInteractor intercator, CreateAccountSuscriber suscriber)
+        public CreateAccountController(ICreateAccountInteractor intercator)
         {
-            DomainEventsPublisher.GetInstancia().ResetSuscribers();
-            DomainEventsPublisher.GetInstancia().RegisterSuscriber(suscriber);
             _interactor = intercator;
         }
 

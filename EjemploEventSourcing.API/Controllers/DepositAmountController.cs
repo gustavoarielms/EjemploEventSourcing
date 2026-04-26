@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Interactors.DepositAmount;
 using Microsoft.AspNetCore.Mvc;
-using EjemploEventSourcing.Application.Domain.Events.Services;
-using EjemploEventSourcing.Application.Services;
 
 namespace EjemploEventSourcing.IPresenters
 {
@@ -12,10 +10,8 @@ namespace EjemploEventSourcing.IPresenters
     {
         private readonly IDepositAmountInteractor _interactor;
 
-        public DepositAmountController(IDepositAmountInteractor intercator, DepositAmountSuscriber suscriber)
+        public DepositAmountController(IDepositAmountInteractor intercator)
         {
-            DomainEventsPublisher.GetInstancia().ResetSuscribers();
-            DomainEventsPublisher.GetInstancia().RegisterSuscriber(suscriber);
             _interactor = intercator;
         }
 

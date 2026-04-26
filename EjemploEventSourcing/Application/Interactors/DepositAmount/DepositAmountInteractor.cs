@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EjemploEventSourcing.Application.Domain.Entities;
-using EjemploEventSourcing.Application.Domain.Events.Services;
+using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 using EjemploEventSourcing.Application.Gateways;
 
 namespace EjemploEventSourcing.Application.Interactors.DepositAmount
 {
     public class DepositAmountInteractor : IDepositAmountInteractor
     {
-        private IGetAccountByIdGateway _getAccountById;
+        private readonly IGetAccountByIdGateway _getAccountById;
+        private readonly IDomainEventsPublisher _publisher;
 
-        public DepositAmountInteractor(IGetAccountByIdGateway getAccountById)
+        public DepositAmountInteractor(
+            IGetAccountByIdGateway getAccountById,
+            IDomainEventsPublisher publisher)
         {
             _getAccountById = getAccountById;
+            _publisher = publisher;
         }
 
         public async Task Execute(string accountId, decimal depositAmount)
@@ -27,7 +31,7 @@ namespace EjemploEventSourcing.Application.Interactors.DepositAmount
                 if (account.HasChanges())
                 {
                     var changes = account.GetChanges();
-                    await DomainEventsPublisher.GetInstancia().PublishEvents(changes);
+                    await _publisher.PublishEvents(changes);
                     account.AcceptChanges();
                 }
             }
