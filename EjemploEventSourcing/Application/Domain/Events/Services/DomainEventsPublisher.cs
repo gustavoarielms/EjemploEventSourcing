@@ -6,38 +6,13 @@ using EjemploEventSourcing.Application.Domain.Events.Interfaces;
 
 namespace EjemploEventSourcing.Application.Domain.Events.Services
 {
-    public class DomainEventsPublisher
+    public class DomainEventsPublisher : IDomainEventsPublisher
     {
         private IList<IDomainEventsSuscriber> _suscribers;
-        private static DomainEventsPublisher _instance;
 
-        public DomainEventsPublisher()
+        public DomainEventsPublisher(IEnumerable<IDomainEventsSuscriber> suscribers)
         {
-            _suscribers = Enumerable.Empty<IDomainEventsSuscriber>().ToList();
-        }
-
-        public static DomainEventsPublisher GetInstancia()
-        {
-            if (_instance != null)
-                return _instance;
-
-            _instance = new DomainEventsPublisher();
-            return _instance;
-        }
-
-        public void RegisterSuscriber(IDomainEventsSuscriber suscriber)
-        {
-            _suscribers.Add(suscriber);
-        }
-
-        public void RemoveSuscriber(IDomainEventsSuscriber suscriber)
-        {
-            _suscribers.Remove(suscriber);
-        }
-
-        public void ResetSuscribers()
-        {
-            _suscribers = Enumerable.Empty<IDomainEventsSuscriber>().ToList();
+            _suscribers = suscribers.ToList();
         }
 
         public async Task PublishEvent(IAggregateInfo aggregateInfo, int eventVersion, IEvent e)

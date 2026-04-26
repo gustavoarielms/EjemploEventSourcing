@@ -1,4 +1,6 @@
 ﻿using EjemploEventSourcing.Application.Configuration;
+using EjemploEventSourcing.Application.Domain.Events.Interfaces;
+using EjemploEventSourcing.Application.Domain.Events.Services;
 using EjemploEventSourcing.Application.Gateways;
 using EjemploEventSourcing.Application.Interactors.CreateAccount;
 using EjemploEventSourcing.Application.Interactors.DepositAmount;
@@ -45,8 +47,9 @@ namespace EjemploEventSourcing.IoC
             services.AddScoped<IGetAccountsGateway, GetAccountsDAO>();
             services.AddScoped<ICreateAccountGateway, CreateAccountDAO>();
             services.AddScoped<IEventStoreService, EventStoreService>();
-            services.AddScoped<CreateAccountSuscriber>();
-            services.AddScoped<DepositAmountSuscriber>();
+            services.AddScoped<IDomainEventsPublisher, DomainEventsPublisher>();
+            services.AddScoped<IDomainEventsSuscriber, CreateAccountSuscriber>();
+            services.AddScoped<IDomainEventsSuscriber, DepositAmountSuscriber>();
         }
     }
 }
