@@ -36,8 +36,7 @@ namespace EjemploEventSourcing.IoC
             services.AddSingleton<IConnectionFactory>(rabbitFactory);
 
             services.AddDbContext<EventStoreDBContext>(opt =>
-                opt.UseNpgsql(configuration.GetConnectionString("MyWebApiConnection")),
-                ServiceLifetime.Singleton);
+                opt.UseNpgsql(configuration.GetConnectionString("MyWebApiConnection")));
 
             services.AddScoped<IGetAccountByIdInteractor, GetAccountByIdInteractor>();
             services.AddScoped<IGetAccountsInteractor, GetAccountsInteractor>();
