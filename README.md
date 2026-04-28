@@ -39,13 +39,43 @@ dotnet ef database update \
   --startup-project EjemploEventSourcing.API
 ```
 
+Si `dotnet ef` no está instalado:
+
+```bash
+dotnet tool install --global dotnet-ef --version 8.0.8
+```
+
 ## Ejecutar
 
 ```bash
-dotnet run --project EjemploEventSourcing.API
+dotnet run --no-launch-profile \
+  --project EjemploEventSourcing.API \
+  --urls http://127.0.0.1:5110
 ```
 
-Swagger queda disponible en la URL configurada por ASP.NET Core para el proyecto.
+Swagger queda disponible en <http://127.0.0.1:5110>.
+
+## Smoke test
+
+Crear cuenta:
+
+```bash
+curl -X POST http://127.0.0.1:5110/CreateAccount
+```
+
+Depositar en la cuenta creada:
+
+```bash
+curl -X POST http://127.0.0.1:5110/DepositAmount \
+  -H "Content-Type: application/json" \
+  -d '{"accountId":"ACCOUNT_ID","depositAmount":100}'
+```
+
+Consultar la cuenta:
+
+```bash
+curl http://127.0.0.1:5110/GetAccountById/ACCOUNT_ID
+```
 
 ## Validar
 

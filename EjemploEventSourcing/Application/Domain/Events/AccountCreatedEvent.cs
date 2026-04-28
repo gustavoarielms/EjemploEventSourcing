@@ -11,7 +11,7 @@ namespace EjemploEventSourcing.Application.Domain.Events
 
         public AccountCreatedEvent(DataAccountCreatedEvent data)
         {
-            _dateItHappened = DateTime.Now;
+            _dateItHappened = DateTime.UtcNow;
             _data = data;
         }
 

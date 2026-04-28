@@ -10,7 +10,7 @@ namespace EjemploEventSourcing.Application.Domain.Events
 
         public AmountDepositedEvent(DataAmountDepositedEvent data)
         {
-            _dateItHappened = DateTime.Now;
+            _dateItHappened = DateTime.UtcNow;
             _data = data;
         }
 
