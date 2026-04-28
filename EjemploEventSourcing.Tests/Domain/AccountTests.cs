@@ -22,6 +22,7 @@ public class AccountTests
         Assert.Equal(1, changes.AggregateInfo.AggregateActualVersion);
         Assert.Equal(nameof(Account), changes.AggregateInfo.AggregateType);
         Assert.Equal(EventTypes.AccountCreated, @event.GetEventType());
+        Assert.Equal(DateTimeKind.Utc, @event.GetDateItHappened().Kind);
         Assert.Equal("account-1", data.AccountId);
         Assert.Equal(0m, data.Balance);
     }
@@ -42,6 +43,7 @@ public class AccountTests
         Assert.Equal(1, changes.AggregateInfo.AggregateBaseVersion);
         Assert.Equal(2, changes.AggregateInfo.AggregateActualVersion);
         Assert.Equal(EventTypes.AmountDeposited, @event.GetEventType());
+        Assert.Equal(DateTimeKind.Utc, @event.GetDateItHappened().Kind);
         Assert.Equal("account-1", data.AccountId);
         Assert.Equal(25m, data.AmountDeposited);
     }
