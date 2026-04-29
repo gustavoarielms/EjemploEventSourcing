@@ -57,6 +57,22 @@ Swagger queda disponible en <http://127.0.0.1:5110>.
 
 ## Smoke test
 
+El flujo local completo se puede ejecutar con:
+
+```bash
+script/smoke/local-account-flow.sh
+```
+
+Para ejecutar desde una base limpia y apagar las dependencias al finalizar:
+
+```bash
+script/smoke/local-account-flow.sh --reset-data --down-deps
+```
+
+El script levanta dependencias si no estan corriendo, aplica migraciones, inicia la API en `http://127.0.0.1:5110`, crea una cuenta, deposita `100`, valida el balance y verifica mensajes en RabbitMQ.
+
+### Smoke test manual
+
 Crear cuenta:
 
 ```bash
