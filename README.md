@@ -4,7 +4,7 @@ Ejemplo de Event Sourcing con ASP.NET Core, PostgreSQL como event store y Rabbit
 
 ## Requisitos
 
-- .NET SDK 8
+- .NET SDK 10
 - Docker
 
 ## Dependencias locales
@@ -42,7 +42,7 @@ dotnet ef database update \
 Si `dotnet ef` no está instalado:
 
 ```bash
-dotnet tool install --global dotnet-ef --version 8.0.8
+dotnet tool install --global dotnet-ef --version 10.0.7
 ```
 
 ## Ejecutar

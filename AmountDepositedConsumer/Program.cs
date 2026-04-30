@@ -4,12 +4,13 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace AmountDepositedConsumer
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var rabbitFactory = new ConnectionFactory
             {
@@ -19,20 +20,21 @@ namespace AmountDepositedConsumer
                 HostName = "localhost"
             };
 
-            using var connection = rabbitFactory.CreateConnection();
-            using var channel = connection.CreateModel();
+            await using var connection = await rabbitFactory.CreateConnectionAsync();
+            await using var channel = await connection.CreateChannelAsync();
 
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.ReceivedAsync += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var response = JsonSerializer.Deserialize<ResponseDTO>(message);
                 Console.WriteLine($" [x] Received {response.AggregateId}, {response.AggregateData}");
+                return Task.CompletedTask;
             };
-            channel.BasicConsume(queue: "AmountDeposited",
-                                 autoAck: true,
-                                 consumer: consumer);
+            await channel.BasicConsumeAsync(queue: "AmountDeposited",
+                                            autoAck: true,
+                                            consumer: consumer);
 
             Console.ReadLine();
         }

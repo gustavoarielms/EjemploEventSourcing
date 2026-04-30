@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace EjemploEventSourcing.Migrations
 {
     [DbContext(typeof(EventStoreDBContext))]
@@ -15,11 +17,12 @@ namespace EjemploEventSourcing.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "10.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("EjemploEventSourcing.Infraestructura.Repositorios.Aggregate", b =>
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("EjemploEventSourcing.Infrastructure.Repositorios.Aggregate", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -35,7 +38,7 @@ namespace EjemploEventSourcing.Migrations
                     b.ToTable("Aggregates");
                 });
 
-            modelBuilder.Entity("EjemploEventSourcing.Infraestructura.Repositorios.Event", b =>
+            modelBuilder.Entity("EjemploEventSourcing.Infrastructure.Repositorios.Event", b =>
                 {
                     b.Property<string>("AggregateId")
                         .HasColumnType("text");
@@ -47,8 +50,7 @@ namespace EjemploEventSourcing.Migrations
                         .HasColumnType("jsonb");
 
                     b.Property<DateTime>("DateTimeCreate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("EventType")
                         .HasColumnType("integer");

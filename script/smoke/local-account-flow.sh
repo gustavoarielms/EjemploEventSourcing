@@ -3,7 +3,8 @@ set -euo pipefail
 
 API_URL="${API_URL:-http://127.0.0.1:5110}"
 DEPOSIT_AMOUNT="${DEPOSIT_AMOUNT:-100}"
-DOTNET_EF_VERSION="${DOTNET_EF_VERSION:-8.0.8}"
+DOTNET_CMD="${DOTNET_CMD:-dotnet}"
+DOTNET_EF_VERSION="${DOTNET_EF_VERSION:-10.0.7}"
 DOWN_DEPS=false
 RESET_DATA=false
 
@@ -52,6 +53,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 API_LOG="$(mktemp "${TMPDIR:-/tmp}/ejemplo-event-sourcing-api.XXXXXX")"
 API_PID=""
+
+if [[ "${DOTNET_CMD}" == */* ]]; then
+  DOTNET_CMD_DIR="$(cd "$(dirname "${DOTNET_CMD}")" && pwd)"
+  export DOTNET_ROOT="${DOTNET_ROOT:-${DOTNET_CMD_DIR}}"
+  export PATH="${DOTNET_CMD_DIR}:${PATH}"
+fi
 
 log() {
   printf '[smoke] %s\n' "$*"
@@ -119,21 +126,23 @@ wait_for_service_health() {
 }
 
 resolve_dotnet_ef() {
-  if dotnet ef --version >/dev/null 2>&1; then
-    DOTNET_EF=(dotnet ef)
+  local tool_path="/tmp/dotnet-tools-${DOTNET_EF_VERSION}"
+
+  if [[ "$("${DOTNET_CMD}" ef --version 2>/dev/null || true)" == "${DOTNET_EF_VERSION}"* ]]; then
+    DOTNET_EF=("${DOTNET_CMD}" ef)
     return 0
   fi
 
-  if [[ -x /tmp/dotnet-tools/dotnet-ef ]]; then
-    DOTNET_EF=(/tmp/dotnet-tools/dotnet-ef)
+  if [[ -x "${tool_path}/dotnet-ef" ]]; then
+    DOTNET_EF=("${tool_path}/dotnet-ef")
     return 0
   fi
 
-  log "Installing dotnet-ef ${DOTNET_EF_VERSION} into /tmp/dotnet-tools"
-  dotnet tool install dotnet-ef \
+  log "Installing dotnet-ef ${DOTNET_EF_VERSION} into ${tool_path}"
+  "${DOTNET_CMD}" tool install dotnet-ef \
     --version "${DOTNET_EF_VERSION}" \
-    --tool-path /tmp/dotnet-tools >/dev/null
-  DOTNET_EF=(/tmp/dotnet-tools/dotnet-ef)
+    --tool-path "${tool_path}" >/dev/null
+  DOTNET_EF=("${tool_path}/dotnet-ef")
 }
 
 wait_for_api() {
@@ -176,7 +185,7 @@ assert_queue_messages_at_least() {
 }
 
 require_command docker
-require_command dotnet
+require_command "${DOTNET_CMD}"
 require_command curl
 
 cd "${REPO_ROOT}"
@@ -204,7 +213,7 @@ log "Applying EF Core migrations"
   --startup-project EjemploEventSourcing.API
 
 log "Starting API on ${API_URL}"
-dotnet run --no-launch-profile \
+"${DOTNET_CMD}" run --no-launch-profile \
   --project EjemploEventSourcing.API \
   --urls "${API_URL}" >"${API_LOG}" 2>&1 &
 API_PID="$!"
@@ -212,19 +221,25 @@ API_PID="$!"
 wait_for_api
 
 log "Creating account"
-account_response="$(curl -fsS -X POST "${API_URL}/CreateAccount")"
+if ! account_response="$(curl -fsS -X POST "${API_URL}/CreateAccount")"; then
+  fail "CreateAccount request failed"
+fi
 account_id="${account_response%\"}"
 account_id="${account_id#\"}"
 [[ -n "${account_id}" ]] || fail "CreateAccount did not return an account id"
 log "Created account ${account_id}"
 
 log "Depositing ${DEPOSIT_AMOUNT}"
-curl -fsS -X POST "${API_URL}/DepositAmount" \
+if ! curl -fsS -X POST "${API_URL}/DepositAmount" \
   -H "Content-Type: application/json" \
-  -d "{\"accountId\":\"${account_id}\",\"depositAmount\":${DEPOSIT_AMOUNT}}" >/dev/null
+  -d "{\"accountId\":\"${account_id}\",\"depositAmount\":${DEPOSIT_AMOUNT}}" >/dev/null; then
+  fail "DepositAmount request failed"
+fi
 
 log "Reading account ${account_id}"
-account_json="$(curl -fsS "${API_URL}/GetAccountById/${account_id}")"
+if ! account_json="$(curl -fsS "${API_URL}/GetAccountById/${account_id}")"; then
+  fail "GetAccountById request failed"
+fi
 case "${account_json}" in
   *"\"id\":\"${account_id}\""*"\"balance\":${DEPOSIT_AMOUNT}"*)
     log "Balance verified: ${DEPOSIT_AMOUNT}"
