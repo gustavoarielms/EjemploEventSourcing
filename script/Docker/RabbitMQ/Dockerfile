@@ -1,4 +1,4 @@
-FROM rabbitmq:3.8.3-management-alpine
+FROM rabbitmq:4.3.0-management-alpine
 
 LABEL maintainer="gustavoarielms@gmail.com"
 
