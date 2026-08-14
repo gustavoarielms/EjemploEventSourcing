@@ -20,6 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EjemploEventSourcing.Tests", "EjemploEventSourcing.Tests\EjemploEventSourcing.Tests.csproj", "{7F633242-124D-4713-AA65-F4690B0C26AA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventSourcing.Core", "EventSourcing.Core\EventSourcing.Core.csproj", "{D2A370A4-171D-493D-9A81-C04A5B57DC8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventSourcing.Core.Tests", "EventSourcing.Core.Tests\EventSourcing.Core.Tests.csproj", "{7A2F252B-054E-44A7-8409-909B62DFE95D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{7F633242-124D-4713-AA65-F4690B0C26AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F633242-124D-4713-AA65-F4690B0C26AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F633242-124D-4713-AA65-F4690B0C26AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A370A4-171D-493D-9A81-C04A5B57DC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A370A4-171D-493D-9A81-C04A5B57DC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A370A4-171D-493D-9A81-C04A5B57DC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A370A4-171D-493D-9A81-C04A5B57DC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A2F252B-054E-44A7-8409-909B62DFE95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A2F252B-054E-44A7-8409-909B62DFE95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A2F252B-054E-44A7-8409-909B62DFE95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A2F252B-054E-44A7-8409-909B62DFE95D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
